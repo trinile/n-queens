@@ -14,7 +14,7 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed 
 // such that none of them can attack each other
   
-window.createArr = function(n, positionsArray) {
+window.createBoardArr = function(n, positionsArray) {
   //input = [0,1,2,3] for n = 4
   //initialize array for board = [];
   var boardArray = [];
@@ -34,7 +34,7 @@ window.createArr = function(n, positionsArray) {
   return boardArray;
 };
 
-window.splitArray = function(array, n) {
+window.createBoard = function(array, n) {
   //[0,0,1,1]
   //split boardArr
   //iterate through array, slicing when you get to n - 1 index.
@@ -47,35 +47,56 @@ window.splitArray = function(array, n) {
   return board;
 };
 
+// window.combo = function(n) {
+//   //you have a n x n board. length of board as an array is n x n = 4 if n = 2;
+//   //goal: determine positions for each 1 piece (n pieces total);
+
+//   //initialize array of all positions
+//   var allBoards = [];
+//   var positionsArr, firstToggle, secondToggle;
+//   for (var i = 0; i <= n * n - n + 0; i++) {
+//     firstToggle = i;
+//     for (var j = i + 1; j <= n * n - n + 1; j++) {
+//       secondToggle = j;
+//       positionsArr = [];
+//       positionsArr.push(firstToggle, secondToggle);
+//       var boardArr = window.createArr(n, positionsArr);
+//       allBoards.push(window.splitArray(boardArr, n));
+//     }
+  
+//   }
+//   return allBoards;
+// };
 
 
 window.combo = function(n) {
-  //you have a n x n board. length of board as an array is n x n = 4 if n = 2;
-  //goal: determine positions for each 1 piece (n pieces total);
+  var boards = [];
 
-  //initialize array of all positions
-  var allBoards = [];
-  var positionsArr, firstToggle, secondToggle;
-  for (var i = 0; i <= n*n - n + 0; i++) {
-    firstToggle = i;
-    for (var j = i + 1; j <= n * n - n + 1; j++) {
-      secondToggle = j;
-      positionsArr = [];
-      positionsArr.push(firstToggle,secondToggle);
-      var boardArr = window.createArr(n, positionsArr);
-      allBoards.push(window.splitArray(boardArr,n));
-//       allBoards.push(splitArr);
+  var comboHelper = function(nToggles, startIndex, maxIndex, positionsArr) {
+    var positionsArr = positionsArr || [];
+    if (nToggles === 0) {
+      console.log('when nToggles = 0, :', positionsArr);
+      //create board from positionsArray
+      var boardArr = window.createBoardArr(n, positionsArr);
+      //split board to create matrix
+      boards.push(window.createBoard(boardArr, n));
+      return positionsArr;
     }
-  
-  }
-  return allBoards;
-  //create an array from those positions 
-  //split array by n
 
-  //
+    for (var i = startIndex; i <= maxIndex; i++) {
+      var togglePosition = i;
+      comboHelper(nToggles - 1, i + 1, maxIndex + 1, positionsArr.concat(togglePosition));
+    }
+    
+  };
+
+  var maxIndex = n * n - n;
+  // console.log('max: ', maxIndex);
+  comboHelper(n, 0, maxIndex, []);
+  return boards;
 };
 
-window.combo(2);
+
 
 
 window.findNRooksSolution = function(n) {
