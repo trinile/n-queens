@@ -213,6 +213,7 @@
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
       //input is column index
 
+      var pieces = 0;
       //set rowIndex as second argument, if it is passed in
       var rowIndex = arguments.length === 2 ? arguments[1] : 0;
 
@@ -242,7 +243,28 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var lastCol = this.rows().length - 1;
+      //iterate through the rows
+      for (var i = 0; i < this.rows().length - 1; i++) {
+        //iterate first row, invoke at entire length of array, except index 0
+        if (i === 0) {
+          //iterate through index in first row
+          for (var j = this.rows().length - 1; j > 0; j--) {
+            // var minorIndex = this.rows().length - 1;
+            if (this.hasMinorDiagonalConflictAt(j, i)) {
+              return true;
+            }
+          }
+        //rest of the rows, except the last row
+        } else {
+          if (this.hasMinorDiagonalConflictAt(lastCol, i)) {
+            return true;
+          }
+        }
+      }
+      return false;
+
+
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
