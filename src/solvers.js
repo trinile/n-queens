@@ -14,91 +14,68 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed 
 // such that none of them can attack each other
   
-  // var b = new Board( {n: 5})
-  //return b.rows() ???? 
-  //given n pieces and n^2 positions. 
-    //write a computation that will call toggle n times
-  //return [ [ b.rows() ] ,  [ a.rows() ] ]   
-
-  //do permutations that 
-
-  //[
-  //['rock', 'paper', 'scissors'], 
-  //['rock', 'rock', 'rock']
-  //]
-
-  // var allpossibilities = 
-  // [
-  //   [ [1, 0] [0, 1]  ]
-  //   [ [1, 1], [0, 0] ]
-  //   [ [0, 1], [1, 0] ]
-  // ]
-  // someConflictMethod(allpossibilities[i])
-
-window.combinations = function(n) {
-
-
-  //FOR 2x2
-  var allCombo = [];
-
-    //at index 0, add 2 arrays from 
-  //start with toggling first position (row 0, col 0), can only toggle til last row index 0
-  var newBoard = new Board({ n : 2});
-  // newBoard.toggle(0, 0);
-  for (var i, j = 0; i < newBoard.length; j++) {
-    newBoard.toggle(i, j);
-    //while toggle in the first position, next toggle will be in index + 1 position, can only toggle until index 1 of last row
+window.createArr = function(n, positionsArray) {
+  //input = [0,1,2,3] for n = 4
+  //initialize array for board = [];
+  var boardArray = [];
+  if (positionsArray.length !== n) {
+    alert('wrong number of positions for n');
   }
-
-  return allCombo;
-
-
-
-
-  //FOR 2x2
-  var allCombo = [];
-
-  //gives all the possible row combinations
-  var combos = []; //has 4 subarrays
-  for (var i = 0; i < 2; i++) { //row
-    for (var j = 0; j < 2; j++) { //column
-      combos.push([i, j]); //[ [0, 0], [0, 1], [1, 0], [1, 1] ]
-    }
+  //create an board of n * n length of 0s
+  for (var i = 0; i < n * n; i++) {
+    boardArray.push(0);
   }
-
-  //need to add row combinations into boards
-  var subCombo = [];
-  [ combos[0], combos[1] ]
-  [ combos[0], combos[2] ]
-
-
-
-  for (var k = 0; k < combos.length; k++) {
-    //need to add two
-    subCombo.push(combos[k]); //will give array of 
+  //board Array = [0,0,0,0];
+  for (var j = 0; j < positionsArray.length; j++) {
+    var positionIndex = positionsArray[j]; //0, 1, 2, 3
+    boardArray[positionIndex] = 1;
   }
-
-  return allCombo;
-
-
-
-
-  // //have 4 spaces, need to only fill 2
-  // //total 6 combinations
-  // var makeCombo = function(numberToGo, addedSoFar) {
-  //   //add number to the first position
-  //   for (var i = 0; i < numberToGo; i++) {
-  //     for (var j = 0; j < numberToGO; j++) {
-  //     //add 1 to 
-        
-  //     }
-  //   }
-  // };
-  // makeCombo(n, []);
-  
-  
-
+  //return board array that includes 1s in the positions given by the positionsArray
+  return boardArray;
 };
+
+window.splitArray = function(array, n) {
+  //[0,0,1,1]
+  //split boardArr
+  //iterate through array, slicing when you get to n - 1 index.
+  //n rows 
+  var board = [];
+  for (var i = 0; i < n * n; i = i + n) {
+    var row = array.slice(i, n + i);
+    board.push(row);
+  }
+  return board;
+};
+
+
+
+window.combo = function(n) {
+  //you have a n x n board. length of board as an array is n x n = 4 if n = 2;
+  //goal: determine positions for each 1 piece (n pieces total);
+
+  //initialize array of all positions
+  var allBoards = [];
+  var positionsArr, firstToggle, secondToggle;
+  for (var i = 0; i <= n*n - n + 0; i++) {
+    firstToggle = i;
+    for (var j = i + 1; j <= n * n - n + 1; j++) {
+      secondToggle = j;
+      positionsArr = [];
+      positionsArr.push(firstToggle,secondToggle);
+      var boardArr = window.createArr(n, positionsArr);
+      allBoards.push(window.splitArray(boardArr,n));
+//       allBoards.push(splitArr);
+    }
+  
+  }
+  return allBoards;
+  //create an array from those positions 
+  //split array by n
+
+  //
+};
+
+window.combo(2);
 
 
 window.findNRooksSolution = function(n) {
