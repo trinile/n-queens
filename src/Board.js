@@ -148,35 +148,34 @@
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       //majorDiagonalColumnIndexAtFirstRow is the column index at the first row it appears
+      //input: column index at first row
+
       //if another argument passed in, assume it is the rowIndex of majorDiagonal start.
       if (arguments.length === 2) {
         var rowIndex = arguments[1];
       }
 
       var pieces = 0;
-      //iterateLength is dependent on rows length and start of majorDiagonalcolumnIndex 
+      //Length of majorDiagonal is dependent on rows length and start of majorDiagonalcolumnIndex 
       var iterateLength = this.rows().length - majorDiagonalColumnIndexAtFirstRow;
-      //input: column index at first row
-      //interate through rows index
+      //start colIndex with input value
       var colIndex = majorDiagonalColumnIndexAtFirstRow; //should check here first, then go next
+      //iterate through the possible length of the majorDiagonal starting with rowIndex.
       for (var i = rowIndex || 0; i < iterateLength; i++) {
-        // var nextRowIndex = i;
+        //value at position of majorDiagonal is the rowIndex and columnIndex
         var majorValue = this.rows()[i][colIndex]; //gives value at position
-        //check to see if rowIndex+1 colIndex+1 === 1
-        if (majorValue === undefined) {
-          return false;
-        }
-        else if (majorValue === 1 && pieces > 0) {
+        //if value at position is 1 and there was already a value of 1 on the diagonal, return true (conflict).
+        if (majorValue === 1 && pieces > 0) {
           return true;
+        //if value at position is 1, add to pieces.
         } else if (majorValue === 1) {
           pieces++;
         }
+        //increment colIndex to move to next diagonal position in the next row.
         colIndex++;
       }
-      //keep checking until end of board
+      //if no conflicts found, return false
       return false;
-
-
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -212,7 +211,33 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      //input is column index
+
+      //set rowIndex as second argument, if it is passed in
+      var rowIndex = arguments.length === 2 ? arguments[1] : 0;
+
+      var diagonalLength = this.rows().length - rowIndex - (this.rows().length - minorDiagonalColumnIndexAtFirstRow - 1); 
+      //iterate from rowIndex until diagonal length
+      var colIndex = minorDiagonalColumnIndexAtFirstRow;
+      for (var i = 0; i < diagonalLength; i++) {
+        //value at position
+        var minorValue = this.rows()[rowIndex][colIndex];
+        //if value at position is === 1 && pieces is > 0 
+        if (minorValue === 1 && pieces > 0) {
+          //return true (conflict exists)
+          return true;
+        //else if value at position == 1 
+        } else if (minorValue === 1) {
+          //add to pieces
+          pieces++;
+        }
+
+        //increment columnIndex and rowIndex for next position in diagonal
+        colIndex--;
+        rowIndex++;
+      }
+      //if no conflict found, return false.
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
