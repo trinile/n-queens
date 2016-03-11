@@ -194,7 +194,6 @@
             }
           }
         } else {
-          debugger;
           if (this.hasMajorDiagonalConflictAt(0, j)) { //(colIndex, rowIndex)
             return true;
           } 
